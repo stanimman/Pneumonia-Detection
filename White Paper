@@ -1,2 +1,96 @@
 This paper presents an approach to solve the common task in computer vision problems using the tecchnique called transfer learning. This methodology would greatly reduce the effort required 
 to build deep learning model from the scratch in computer vision task .This methodology is highly successfull and has been implemented at large in the deep learning community .
+My White paper - Transfer learning in Computer Vision task
+
+This paper presents an approach to solve the common task in computer vision problems using a technique called transfer learning. This methodology would greatly reduce the effort required 
+to build deep learning model from the scratch in computer vision task .This methodology is highly successfull and has been implemented at large in the deep learning community .
+
+Problem : The advent of deep learning has made it possible for the machine to learn cognitive intelligent of human such as vision,speech,music which were perceived highly impossible two decade ago.We could see the use of it in our 
+day to day life in the form of home assitance (Alexa,google home) , name tagging in photos,chatbot in website.But the actual implementation of the deep learning models poses two main problem for a company which are just beginning to
+implement in those frame work 
+	1. Deep learning requires lot of data to train the network from scratch. The performance is directly proportinal to the amount of data
+
+	In general to train a image classifier from scratch we would require it would require minimum 5000 images for each catagory . Not just collection of 5000 images, but hand labeling of the images would be a tedious 
+	and tiresome work for any organization venturing into deep learning. Commoly used CIFAR 10 data set has around 60k images for 10 catagory(classes) including the test image. Even though data augmentation techniques like horizontal , vertical flips, rotation , crops 
+	helps to bring stability in computer vision tasks, in deep learning the general rule is - "More the data better the accuracy".
+
+	It has been proved that "Performance increases logarithmically based on volume of training data" in deep learning  * https://ai.googleblog.com/2017/07/revisiting-unreasonable-effectiveness.html (Need to attach the document) 
+
+	2. Training of deep learning networks are highly computationally intensive and requires speciallized hardware like GPU / TPU for better train timing. (In depth)  - Time taken to train in image net 
+	
+	Not just data collection but training deep learning with the large set of data is highly computationally intensive. Finishing a 90-epoch ImageNet-1k training with ResNet-50 on a NVIDIA M40 GPU takes 14 days. * https://arxiv.org/pdf/1709.05011.pdf
+	Though state of the computer may reduce the training time , it is still highly costly to train using the hardware . Training cost for different hardware is given below. * https://dawn.cs.stanford.edu/benchmark/
+	
+This paper would present an approach in solving the stated problems with an actual implementation on a real world problem using public dataset. 
+
+Technique of transfer learning :
+
+	Convolution neural network(CNN) with different architecture is widely used in computer vision task. The initial layer of CNN  will try to understand the edges present in images, the first few layer of CNN 
+	will learn basic structure in the images. The deeper layer of the network will adjust the activation layer to learn the complex feature specific to the dataset. But the first layer will learn simple shape which will be same across
+	different domains of image. A graphical visualization of activation of first layer of the CNN network is given below
+
+	
+	Put in a layer and explain it still better. 
+	
+	Transfer learning takes advantage of this little detail ,that the activation layer is common for the first few layer of the CNN network as it tries to learn very simple structure from the images and only the deeper layer needs
+	to trained . So in "Transfer learning technique we will use the weight which is already trained on bigger dataset with state of the architecture and will only customize the last few layer of the network as per requirement. With
+	the pretrained weight we will train the last few layer of the network and freeze the weights of the initial layer.
+
+
+	- https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf
+
+Demonstration : 
+
+Dataset used : MURA Image classification
+
+This is a research dataset of radiographs of musculoskeletal condition with normal and abnormal condition published by Stanford university . The objective of the research is to detect abnormality in the Musculoskeletal condition . 
+
+There are seven different catagory of Musculoskeletal condition given in the dataset, we have taken abnormality in the FOREARM for this experiment. The dataset has 4931 images in train dataset and 465 images in validation.We trained 
+the data using resnet18 architecture pretrained on imagenet. The hyper parameters used in the experiments are as follows, optimizer - Adam , learning rate = 1e-4 and decay LR by a factor of 0.1 after every 5 epoch .
+We preprocessed the radiograph image using Clahe technique to improve the quality of image and normalized the color channels for the experiment. After 10 epoch of training we were getting 84 % accuracy in the validation dataset. We tried 
+various other architectures and fine tuning is done to improve the accuracy but it didn't improve beyond this. 
+
+Dataset used : Dog breed classification dataset 
+
+This dataset is taken from the kaggle competition which comprises of images of dogs of 120 different breed .The goal of the competition is to create a classifier capable of determining breed of the dog from a photo. The dataset has 
+just 8178 image for 120 different breed and 2044 in the validation set.We trained the dataset using Resnet34 architecture pretrained on imagenet.The hyper parameters used in the experiments are as follows, optimizer - Adam , learning rate = 0.01
+and decay LR by a factor of 0.1 after every 5 epoch .We used transformation like RandomHorizontalFlip,ColorJitter,Resize and normalized the color channels for the experiment.After 8 epoch of training we were getting 95 % accuracy.
+
+
+
+Why Dog breed classification dataset has better accuracy than Medical image dataset.
+
+To understand why Dog breed classification has got better accuracy with the transfer learning compared to medical image we need to look at the images of the source data (Imagenet) on which the model is pretrained.
+Given below is the comparision of images . 
+
+So we conclude that basic shape / structure and color channel of the Dog breed classification is in line with the Image net where as it differs significantly in the medical images. 
+
+What is in for Cognizant : 
+	As seen from the above examples we could see that our effort and cost is greatly reduced while using transfer learning when compared to training a model from scratch. Transfered learning works well when the weight pretrained on 
+images of same domain is been used for training the model for example instead of using the weights pretrained on imagenet if weight of model pretrained on other medical images like Chest_Net is used it is possible to better accuracy. 
+Cognizant can create a central repository of pretrained weight for different domains like 
+	1. Medical Image for Health care domain
+	2. Plantation / Agri related Images foManufacturing ,retail domains
+	3. Compliance, accounts payable, underwriting documets for financial domains.
+
+This repository of pretrained weights can be a great asset to the congnizant which can be levearaged by various project for their specific task just by customizing the network architecture.
+
+
+Conclusion : 
+	- Explain - how difficult to train a CNN from scratch
+	- Start highlighliting the advantage of transfer learning over training from scratch
+	- Show the performance some seed classification problem in kaggle 
+		- with custom model
+		- Transfer learning model
+	
+	- Medical Image performance for health care 
+		- Future of Medical Image recognition 
+			- Common task solved
+		- MURA dataset 
+			- Performance of transfer learning in Medical Image 
+			- Why accuracy is close to only 87% 
+			
+	- What can be done in future in Cognizant - 
+		- Pretrained weight repository for all king application
+			- Medical image
+			- Plantation / Agri related Images
